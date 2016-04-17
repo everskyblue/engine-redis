@@ -112,7 +112,7 @@ class Data
 	/**
 	 * obtiene valor de la data o trae el valor del objeto pasado
 	 *
-	 * @access publc
+	 * @access public
 	 * @param string $name
 	 * @return string
 	 */
