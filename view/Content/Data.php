@@ -246,9 +246,9 @@ class Data
 	 
 	protected function dataObject($data = null)
 	{
-		if($this->data instanceof ArrayObject){
-			echo 'object';
-		}
+		/*if($this->data instanceof ArrayObject){
+		
+		}*/
 		
 		if($this->data instanceof \stdClass && $this->data->{$data}){
 			return $this->data->{$data};

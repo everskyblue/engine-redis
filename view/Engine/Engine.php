@@ -83,11 +83,6 @@ class Engine
     			
     			include $this->save([$this->getPathCompile(), $this->templateFile->getFileName()], $arr_t['filename'], $template);
 
-        		/*if(isset($times)){
-        		    if($times < filemtime($arr_t['filename'])){
-        		        $this->put($this->save, $template);
-        		    }
-        		}*/
 		
 		    }else{
 		        
