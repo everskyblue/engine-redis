@@ -50,9 +50,10 @@ class Outlet
 	
 	public static function changeBlockInYield($r_file, $e_file)
 	{
+	    $data = (func_num_args() == 3) ? func_get_arg(2) : array();
 		if( preg_match_all('/\%\{(yield?)\s*(.*)?\}/i', $e_file, $m) ){
 		    
-    		$block = Block::content($r_file);
+    		$block = Block::content(Echos::content($r_file, $data));
     		
     		if($block === false){
     			throw new RuntimeException('hubo un error al compilar los block en '. __METHOD__);
@@ -72,10 +73,10 @@ class Outlet
 			}
 			$outlet = str_replace(array_shift($m), $block, $e_file);
 			
-			return Echos::content($outlet);
+			return Echos::content($outlet, $data);
 		}
 		
-		return new static(Echos::content($r_file));
+		return new static(Echos::content($r_file, $data));
 	}
 	
 	/**

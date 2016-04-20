@@ -62,10 +62,10 @@ class TemplateFile
 	private function withFile($file)
 	{
 		$ext = pathinfo($file);
-		if(isset($ext['extension'])){
+		if(isset($ext['extension']) && in_array($ext['extension'], [self::REDIS_T, self::PHP_T])){
 			$file = substr($file, 0, - strlen($ext['extension']) - 1);
 		}
-		$this->fileName = $ext['filename'];
+		$this->fileName = strstr($ext['basename'], '.') ? substr(strrchr($ext['basename'], '.'), 1) : $ext['filename'];
 		
 		return $file;
 	}

@@ -57,6 +57,7 @@ class View implements IRedis
 	 * @param unknown $path
 	 * @param array $options
 	 */
+     
 	 public function __construct($path, array $options)
      {
     	$this->setPath($path);
@@ -94,7 +95,7 @@ class View implements IRedis
 			$tpl = new TemplateFile($this->getVP() . $tpl);
 		 
 		if(!$tpl->exists())
-			throw new Exception("file no exists or no fount {$this->file}");
+			throw new Exception("file no exists or no fount {$tpl->getFile()}");
 		
 		if((!empty($vars) && !($vars instanceof Data)))
 			$vars = new Data($vars);
@@ -164,9 +165,9 @@ class View implements IRedis
 			throw new Exception("metodo {$name} no definido");
 		}
 		
-		$get = $engine->$name($args);
+		$engine->$name($args);
 		
-		echo $engine;
+		echo $engine . PHP_EOL;
 	}
 	
 	/**

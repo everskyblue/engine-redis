@@ -6,6 +6,10 @@ use ArrayObject;
 
 
 /**
+ *  añadir metodos como -> addData deleteAll iterate filter
+ */
+
+/**
  * @license Apache
  * @author Nike Madrid
  * @copyright Nike Madrid
@@ -45,7 +49,7 @@ class Data
 	protected $increment = 0;
 	
 	/**
-	 * aÃ±ade data
+	 * añade data
 	 *
 	 * @param array|null $data
 	 * @throws Exception
@@ -60,7 +64,7 @@ class Data
 	}
 	
 	/**
-	 * aÃ±adir valor por llamado medio de propiedades
+	 * añadir valor por llamado medio de propiedades
 	 *
 	 * @magic set
 	 * @param string $name
@@ -98,7 +102,7 @@ class Data
 	}
 	
 	/**
-	 * aÃ±adir valores
+	 * añadir valores
 	 *
 	 * @access public
 	 * @param array $val
@@ -246,9 +250,9 @@ class Data
 	 
 	protected function dataObject($data = null)
 	{
-		/*if($this->data instanceof ArrayObject){
-		
-		}*/
+		if($this->data instanceof ArrayObject){
+			echo 'object';
+		}
 		
 		if($this->data instanceof \stdClass && $this->data->{$data}){
 			return $this->data->{$data};
@@ -256,7 +260,7 @@ class Data
 	}
 	
 	/**
-	 * regresa la data entera o los datos del limite si se ah aÃ±adido
+	 * regresa la data entera o los datos del limite si se ah añadido
 	 *
 	 * @access public
 	 * @return arrray

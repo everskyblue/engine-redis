@@ -21,43 +21,28 @@ class Block
 	 
 	public static function content($b_c)
 	{
-		if(preg_match_all('/((\\%\{([block?|a-zA-Z_]*\s(.*)?)\\})*(<[^>]+>|<[^>]+>(.*)<\/[^>]+>|(.*)<\/[^>]+>)*?(\\%\{([endblock?|a-zA-Z]*)?\\})?)/iU', $b_c, $m, PREG_PATTERN_ORDER)){
-		
-			$html = array_shift($m); // array
-			array_shift($m);
+		if(preg_match_all('/((\\%\{[block?]*\s(.*)?\}))/iU', $b_c, $mblock)){
 			
-			$func_redis_first = array_filter(array_shift($m));
-			array_shift($m);
-			
-			$name = array_filter(array_shift($m));
-			
-			$normal_html = Quote::space(implode("", $html));
+			$func = array_shift($mblock);
+			$nameBlock = array_pop($mblock);
 			
 			$arr = 'array(';
+			$keyArr = '__INICIALIZE_BLOCK__';
+			$endKeyArr = '__END_BLOCK__';
 			
-    			$key_element = '__INICIALIZE_BLOCK__';
-    			foreach($func_redis_first as $index => $fr){
-    				$normal_html = str_replace($fr, '\'' . $key_element . Quote::quotationMarks($name[$index]) . '\' => \'', $normal_html);
-    			}
-    			
-    			array_shift($m); 
-    			array_shift($m); 
-    			array_shift($m);
-    			
-    			$end_func = array_filter(array_shift($m));
-    			
-    			$key_end = '__END_BLOCK__';
-    			foreach($end_func as $index => $end){
-    				$normal_html = str_replace($end, ' ' . /*$key_end. static::pregQuote($name[$index]) .*/ '\',', $normal_html);
-    			}
-    			$normal_html = substr($normal_html, 0, - 1);
-    			
-    		$arr .= $normal_html . ');';
-    		
-			unset($m);
+			$quitIdenteHtml = Quote::space($b_c);	
+			$convertArrBlock = str_replace('__QUOTE_OBJECT__', '->',$quitIdenteHtml);
 			
-			return @eval("return {$arr}");
-		} 
+			foreach($func as $index => $func_b){
+				$startBlock = str_replace($func_b, '\'' . $keyArr . Quote::quotationMarks($nameBlock[$index]) . '\' => \'', $convertArrBlock);
+				$convertArrBlock = str_replace('%{endblock}', ' \',', $startBlock);
+			}
+			$arr .= substr($convertArrBlock, 0, -1) . ');';
+			 
+			 unset($mBlock);
+			 
+			return @eval(" return {$arr}");
+		}
 		return $b_c;
 	}
 	

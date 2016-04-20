@@ -11,7 +11,7 @@ use View\Content\TemplateFile;
 
 
 /**
- * @license Apache
+ * @license MIT
  * @author Nike Madrid
  * @copyright Nike Madrid
  */
@@ -66,8 +66,10 @@ class Engine
 	{
 		$arr_t = $this->templateFile->getTemplate();
 		$vars = $this->view->getAssign();
-
+		
 		ob_start();
+		
+		extract(array_shift($vars)->getData());
 		
 		extract($vars);
 		
@@ -79,14 +81,12 @@ class Engine
 		    ));
 		    
 		    if($this->getOptions('cache')) {
-		    
     			
     			include $this->save([$this->getPathCompile(), $this->templateFile->getFileName()], $arr_t['filename'], $template);
-
 		
 		    }else{
 		        
-			 eval("?> $template <?php ");
+			    eval("?> $template <?php ");
 		        
 		    }
 		}else{
@@ -115,7 +115,7 @@ class Engine
 		}
 		
 		$outlet = Outlet::changeBlockInYield(
-			$this->compiler($extends->getContent()), $v_e
+			$this->compiler($extends->getContent()), $v_e, $this->view->getAssign()
 		);
 		
 		return is_object($outlet) ? $outlet->error() : $outlet;
