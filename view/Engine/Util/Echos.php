@@ -9,6 +9,7 @@ use OutOfBoundsException;
 use RuntimeException;
 use View\Content\Data;
 
+
 /**
  * @license Apache 
  * @author Nike Madrid
@@ -61,6 +62,28 @@ class Echos
     }
     
     /**
+     * @param string $variable
+     * @param array $data
+     * @param array $allData
+     * @return boolean|string
+     */
+    
+    protected static function muchVariable($variable, array $data, array $allData)
+    {
+        if(strstr($variable, ',')) {
+            foreach (explode(',', $variable) as $tvars){
+                $tvars = str_replace(array(' ', ','), '', $tvars);
+                if(!empty($tvars) && isset($data[$tvars]) && !isset($allData[$tvars])){
+                    return $tvars;
+                }
+            }
+            return false;
+        }
+        return $variable;
+        
+    }
+    
+    /**
      * @param string $content html
      * @return string
      */
@@ -74,10 +97,14 @@ class Echos
                 $value = array_shift($m);
                 
                 if(!empty($data)){
+                    
                     if(isset($data[0]) && $data[0] instanceof Data){
+                        
                         $idata = array_shift($data);
+                        
                         if(preg_match('/\{\!\s\'|\"(.*)\"|\'\s\!\}/', $value) === 0){
-                            $getNameVar = str_replace(array('.', '->', '$'), '->', preg_replace('/\{\!\s(.*)?\s\!\}/', '$1', $value));
+                            
+                            $getNameVar = str_replace(array('.', '$'), array('->', ''), preg_replace('/\{\!\s(.*)?\s\!\}/', '$1', $value));
                             
                             $str = strstr($getNameVar, '->', true);
                             
@@ -87,20 +114,21 @@ class Echos
                                 
                                 $multi = array_filter(explode('->', $getNameVar));
                                 
-                                $name = array_shift($multi);
-                                
+                                $nameObject = array_shift($multi);
+
                                 foreach ($multi as $pObject) {
-                                    $cll = get_class($allData[$name]);
+                                    $cll = get_class($allData[$nameObject]);
                                     if(strstr($pObject, '(') !== false){
                                         $normalizeMethod = preg_replace('/(.*)?\((.*)?\)/', '$1', $pObject);
                                         
-                                        if((!method_exists($allData[$name], $normalizeMethod) && !is_object($allData[$name]->$normalizeMethod))) {
+                                        if((!method_exists($allData[$nameObject], $normalizeMethod) && !is_object($allData[$nameObject]->$normalizeMethod))) {
                                             throw new \BadMethodCallException("intentando llamar a un no objeto {$cll}::{$normalizeMethod}");
                                         }
                                     }
                                     
                                     if(strstr($pObject, '(') === false){
-                                        if(!property_exists($allData[$name], $pObject)){
+                                        $coincidencia = self::muchVariable($nameObject, $data, $allData);
+                                        if(isset($allData[$coincidencia]) && !property_exists($allData[$coincidencia], $pObject)){
                                             throw new \LogicException("propieda {$pObject} no definida en {$cll}");
                                         }
                                     }
@@ -108,9 +136,11 @@ class Echos
                                 }
                                 
                                 
-                            }else if(!isset($data[$getNameVar]) && !isset($allData[$getNameVar]) && $str === false) {
+                            }else if($str === false && (!isset($data[$getNameVar]) && !isset($allData[$getNameVar]))){
                                 if(!self::checkVarStructureControl($content, $getNameVar)){
-                                    throw new OutOfBoundsException("la variable o clave [{$getNameVar}] no existe!");
+                                    if($coincidencia = self::muchVariable($getNameVar, $data, $allData)) {
+                                        throw new OutOfBoundsException("la variable o clave [{$coincidencia}] no existe!");
+                                    }
                                 }
                                 
                             }
@@ -122,7 +152,7 @@ class Echos
     
             }, $content);
             
-            return (new self())->withErrors(self::replace('/\{\!\s(.*)?\s\!\}/', '<?php echo \$$1; ?>', $dd));
+            return (new self())->withErrors(self::replace('/\{\!\s(.*)?\s\!\}/', '<?php echo $1; ?>', $dd));
         }
     
         return $content;

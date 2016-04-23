@@ -62,6 +62,7 @@ class Outlet
 			$name = array_pop($m);
 			foreach($name as $index => $contentName){
 				$name[$index] = $n = Quote::quotationMarks($contentName);
+                
 				if(!array_key_exists('__INICIALIZE_BLOCK__'.$n, $block)){
 					throw new \OutOfBoundsException("hay una salida con el valor de [{$n}] sin especificar el bloque de la salida [{$n}]");
 				}

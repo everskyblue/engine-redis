@@ -54,15 +54,15 @@ class View implements IRedis
 	
 	/**
 	 * 
-	 * @param unknown $path
+	 * @param string $path
 	 * @param array $options
 	 */
      
-	 public function __construct($path, array $options)
-     {
-    	$this->setPath($path);
-    	$this->options($options);
-     }
+    public function __construct($path, array $options)
+    {
+        $this->setPath($path);
+        $this->options($options);
+    }
 	
      /**
       * @see \View\IRedis::setPath()

@@ -162,7 +162,6 @@ trait Cache
         
         $count = 0;
         $timeCache = array_values($this->timeCache);
-        $guard = [];
         
         foreach($this->timeFirstFile as $update => $file){
        		similar_text($origin, $file, $p);

@@ -21,7 +21,7 @@ class Block
 	 
 	public static function content($b_c)
 	{
-		if(preg_match_all('/((\\%\{[block?]*\s(.*)?\}))/iU', $b_c, $mblock)){
+		if(preg_match_all('/((\\%\{block?\s(.*)?\}))/iU', $b_c, $mblock)){
 			
 			$func = array_shift($mblock);
 			$nameBlock = array_pop($mblock);
@@ -37,8 +37,10 @@ class Block
 				$startBlock = str_replace($func_b, '\'' . $keyArr . Quote::quotationMarks($nameBlock[$index]) . '\' => \'', $convertArrBlock);
 				$convertArrBlock = str_replace('%{endblock}', ' \',', $startBlock);
 			}
-			$arr .= substr($convertArrBlock, 0, -1) . ');';
-			 
+
+			$conv_tag = preg_replace('/\%\{\s*(.*?)?\s*\}/', '<?php $1 ?>', substr($convertArrBlock, 0, -1));
+			$arr .= $conv_tag . ');';
+			
 			 unset($mBlock);
 			 
 			return @eval(" return {$arr}");
