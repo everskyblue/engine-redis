@@ -58,7 +58,7 @@ class Engine
 	public function __construct(View $view)
 	{
 		$this->view = $view;
-		$this->compile = new Compile(null);
+		$this->compile = new Compile($view->getVP());
 		$this->templateFile = $view->getTemplateFile();
 	}
 	

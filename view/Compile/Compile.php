@@ -13,12 +13,18 @@ namespace View\Compile;
 class Compile
 {
     /**
-     * @param string $tpl tags
+     * @var multitype:null|string
      */
     
-    public function __construct($tpl)
+    protected $root;
+    
+    /**
+     * @param string $path tags
+     */
+    
+    public function __construct($path)
     {
-        $this->file = $tpl;
+        $this->root = $path;
     }
     
     public function comments($tpl)
@@ -66,12 +72,12 @@ class Compile
     public function funcPHP($tpl)
     {
         if(preg_match('/\%\{([foreach|for|while|if|else]*)\s(.*)?\}/i', $tpl)){
-            $control = preg_replace('/\%\{((foreach|for|while|if|else()?)\s(.*)?)\}/', '<?php $2($4): ?>', $tpl);
-    
+            $control = preg_replace('/\%\{((foreach|for|while|if|elseif()?)\s(.*)?)?\}/', '<?php $2($4): ?>', $tpl);
+            $control = preg_replace('/\%\{((else()?)?)?\}/', '<?php $1: ?>', $control);
             $tpl = preg_replace('/\%\{((endforeach|endfor|endwhile|endif|break|continue()?)*)\}/', '<?php $1; ?>', $control);
         }
         if(preg_match('/\%\{([include|include_once|require|require_once]*)\s(.*)?\}/i', $tpl)){
-            $tpl = preg_replace('/\%\{((include|include_once|require|require_once()?)\s(.*)?)\}/', '<?php $2 $4; ?>', $tpl);
+            $tpl = preg_replace('/\%\{((include|include_once|require|require_once()?)\s(.*)?)\}/', '<?php $2 "'.$this->root.'".$4; ?>', $tpl);
         }
     
         return $tpl;
