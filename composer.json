@@ -1,8 +1,24 @@
 {
-  "name" : "view",
-  "version" : "1.0",
+  "name" : "doker/engine-redis",
+  "description": "motor de plantilla php",
+  "keywords": ["engine", "redis php", "motor de plantilla", "template"],
+  "licence": "Apache",
   "repositories" : [ {
     "type" : "composer",
     "url" : "https://packagist.org/"
-  } ]
+  } ],
+  "authors": [
+       {
+          "name": "Nike Madrid",
+          "email": "dev_coding@gmail.com"
+      }    
+  ],
+  "require": {
+		"php": ">5.4.0"
+	},
+	"autoload": {
+        "psr-4": {"View\\": "view/"}
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
