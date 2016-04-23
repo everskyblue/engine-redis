@@ -2,10 +2,10 @@
   "name" : "doker/engine-redis",
   "description": "motor de plantilla php",
   "keywords": ["engine", "redis php", "motor de plantilla", "template"],
-  "licence": "Apache",
+  "licence": "Apache-2.0",
   "repositories" : [ {
     "type" : "composer",
-    "url" : "https://packagist.org/"
+    "url" : "https://packagist.org/packages/doker/engine-redis/"
   } ],
   "authors": [
        {
