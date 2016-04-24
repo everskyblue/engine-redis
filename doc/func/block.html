@@ -1,0 +1,24 @@
+<div class="block">
+  <div>
+    <h2>bloques</h2>
+    <p>si haz utilizado la funcion extends deberas proporcinar palabras claves como yield y block.</p>
+    <b>ejemplo:</b>
+    <span>app.redis.php</span>
+    <div class="code">
+      %{yield "content"}
+    </div>
+    <p>este es el archivo principal a extender el app.redis.php en el se especificas la palabra clave <b>yield</b> con un nombre dado.</p>
+    <h4>extender a app.redis.php de tal modo que se ejecute la salida en el <b>yield</b></h4>
+    <p><b>ejemplo: </b><span>login.redis.php</span></p>
+    <div class="code">
+      %{extends "app"} <br>
+      %{block "content"}
+        <p>bloque de codigo enlazado al yield con su nombre</p>
+      %{endblock}
+    </div>
+    <p>la palabra clave <b>block</b> debe de contener el mismo nombre que especificaste en un <b>yield</b>
+    o lanzara una excepcion.</p>
+    <p>puedes especificar cuando <b>yield</b> quieras siempre especificando los <b>block</b> con el mismo nombre de <b>yield</b> y en el mismo orden
+    de la salida del <b>yield.</b></p>
+  </div>
+</div>

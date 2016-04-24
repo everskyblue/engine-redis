@@ -1,0 +1,26 @@
+<div class="assign">
+  <div>
+    <h2>asignacion de valores</h2>
+    <p>el engine redis tiene ciertos conflictos con las comillas simples, por lo que si se asigna valores
+    con las comillas  este de manera</p>
+    <div class="code" style="color:red;">
+      %{extends 'layout'}
+    </div>
+    <p>lanzara una excepcion de compilacion. <br>
+     solo se permite las comillas dobles en todas las funciones.</p>
+     <p>esta es la manera correcta.</p>
+     <div class="code">
+       %{extends "layout"}
+     </div>
+     <p>incluso para imprimir datos puedes asignar valores</p>
+     <div class="code">
+       {! $age = 15 !}
+       {! $name = "juan" !}
+     </div>
+    <p>la concatenacion puedes usarla igual como lo hacia en php.</p>
+    <div class="code">
+      {! "mi nombre es: " . $name . " y mi edad es: " . 20 !}
+    </div>
+    <p>toda las funciones de php estan disponibles.</p>
+  </div>
+</div>

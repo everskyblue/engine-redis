@@ -1,0 +1,23 @@
+<div class="inc-file">
+  <div class="type-func">
+    <h2>incluir o requerir archivos</h2>
+    <p>el engine redis permite tambien utilizar la funcion de incluir o requerir un archivo utilizando las mismas palabras claves.</p>
+    <ol style="margin-left: 1em;">
+      <li>include</li>
+      <li>include_once</li>
+      <li>require</li>
+      <li>require_once</li>
+    </ol>
+    <p>ejemplo</p>
+    <div class="code">
+      %{include "user/auth.php"} o %{require "user/login.redis.php"}
+    </div>
+    <b>nota:</b>
+    <p>
+      <em>no es necesario especificar toda la ruta de donde se encuentra el archivo.</em>
+    </p>
+    <p>
+      <em>ya que los include y lo require se encuentra enlazados desde la ruta principal que haz especificado.</em>
+    </p>
+  </div>
+</div>

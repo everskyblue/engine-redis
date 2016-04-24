@@ -1,0 +1,43 @@
+<div class="config">
+  <div class="starting-engine">
+    <h2>configuración</h2>
+    <p>para unicizalizar la vista que requiera necesita pasar varios parametros
+    a la clase View</p>
+    <div class="code">
+      <div class="namespace">&lt;?php <br><span class="func">use</span> View\View;</div>
+      <div class="cnt">
+        <span class="var">
+          <p>$view = new View('directorio/vista', [<br>
+              'compile' => 'storage/cache/',<br>
+              'cache' => true <br>
+          ]);</p>
+        </span>
+      </div>
+    </div>
+    <p>el primer parametro a recibir es el directorio donde se cargara la vista,
+      el segundo un array donde se le indica donde se guardara la cache del archivo compilado. <br>
+      la segunda opcion indica verdadero guardara la cache esta opcion esta activada por default,
+      si no quiere que se guarde el codigo compilado sera evaludado por la funcion eval.</p>
+  </div>
+  <br>
+  <div class="run-view">
+    <h3>generando vista</h3>
+    <p>una vez especificado los parametros, incializa la vista.</p>
+    <div class="code">
+      $view->render('index')->create();
+    </div>
+    <p>si su vista se encuentra en un siguiente directorio basta con hacerlo de esta manera</p>
+    <div class="code">
+      $view->render('user.signin')->create();
+    </div>
+    <p>tambien puede asignar valores a la vista para ser utilizadas como variables.</p>
+    <div class="code">
+      $view->render('user.signin')->assign(['name' => 'juan'])->create();
+    </div>
+    <span><b>signin.redis.php</b></span>
+    <div class="code">
+      {! $name !}
+    </div>
+    <p>saldra como resultado <b>juan</b></p>
+  </div>
+</div>

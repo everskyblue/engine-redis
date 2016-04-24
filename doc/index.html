@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>documentacion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="top">
+    <header>
+      <h1>engine redis</h1>
+      <div class="cm">
+        <h3 class="min-text">
+          <b>motor de plantilla php</b>
+        </h3>
+        <p><b>una manera facil de crear tus template</b></p>
+      </div>
+    </header>
+  </section>
+  <section class="middle">
+    <main>
+      <div class="container white">
+        <div class="left">
+          <nav class="list">
+            <!--     color: oldlace; -->
+            <a data-html="func/getting_start" class="default" href="#">empezando</a>
+            <a data-html="func/config" href="#">configuracion</a>
+            <a data-html="func/structControl" href="#">estructura de control</a>
+            <a data-html="func/include" href="#">incluir o requerir archivos</a>
+            <a data-html="func/extends" href="#">extender archivos</a>
+            <a data-html="func/block" href="#">bloques</a>
+            <a data-html="func/assignValue" href="#">asignacion de valores</a>
+          </nav>
+        </div>
+        <div class="content-doc"></div>
+      </div>
+    </main>
+  </section>
+  <section class="bottom">
+    <footer style="display: inline-table;width: 100%;">
+      <div class="container">
+        <em>&copy; 2016 template engine redis for php</em>
+        <a data-link="true" href="https://github.com/nikeMadrid/engine-redis" class="right">github</a>
+      </div>
+    </footer>
+  </section>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    $(".content-doc").load('func/getting_start.html');
+    $(document).ready(function() {
+      var a = $('a');
+      $(a).click(function(e) {
+          e.preventDefault();
+          var tag = document.getElementsByTagName('a');
+          var url  = tag[a.index(this)];
+          var html = url.dataset.html;
+          if(!url.dataset.link){
+            $(".content-doc").load(html + ".html");
+          }else{
+            location.href = $(url).attr('href');
+          }
+      });
+    });
+  </script>
+</body>
+</html>
