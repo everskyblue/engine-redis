@@ -104,14 +104,14 @@ class Echos
                         
                         if(preg_match('/\{\!\s\'|\"(.*)\"|\'\s\!\}/', $value) === 0){
                             
-                            $getNameVar = str_replace(array('.', '$'), array('->', ''), preg_replace('/\{\!\s(.*)?\s\!\}/', '$1', $value));
+                            $getNameVar = str_replace(array(/*'.',*/ '$'), array(/*'->',*/ ''), preg_replace('/\{\!\s(.*)?\s\!\}/', '$1', $value));
                             
                             $str = strstr($getNameVar, '->', true);
-                            
                             $allData = $idata->getData();
                             
                             if(( $str !== false )){
-                                
+
+                                die($getNameVar);
                                 $multi = array_filter(explode('->', $getNameVar));
                                 
                                 $nameObject = array_shift($multi);
@@ -148,11 +148,11 @@ class Echos
                         
                     }
                 }
-                return str_replace('.', '__QUOTE_OBJECT__', $value);
+                return str_replace('.', '.', $value);
     
             }, $content);
             
-            return (new self())->withErrors(self::replace('/\{\!\s(.*)?\s\!\}/', '<?php echo $1; ?>', $dd));
+            return self::replace('/\{\!\s(.*)?\s\!\}/', '<?php echo $1; ?>', $dd);
         }
     
         return $content;
