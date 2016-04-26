@@ -1,3 +1,6 @@
+para usar la plantilla se tiene que terminar los archivos con extension .redis.php
+o usar utilizar la la plantilla normal de php
+
 <?php
 
 include 'view/Autoload.php';
