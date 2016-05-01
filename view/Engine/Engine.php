@@ -8,6 +8,7 @@ use View\Engine\Util\Outlet;
 use View\Engine\Util\ViewExt;
 use View\Compile\Cache;
 use View\Content\TemplateFile;
+use View\Content\Data;
 
 
 /**
@@ -69,7 +70,9 @@ class Engine
 		
 		ob_start();
 		
-		extract(array_shift($vars)->getData());
+		if(isset($vars[0]) && $vars[0] instanceof Data){
+		    extract(array_shift($vars)->getData());
+		}
 		
 		extract($vars);
 		
