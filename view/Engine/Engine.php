@@ -71,7 +71,7 @@ class Engine
 		ob_start();
 		
 		if(isset($vars[0]) && $vars[0] instanceof Data){
-		    extract(array_shift($vars)->getData());
+		    extract(array_shift($vars)->getData()); // add data
 		}
 		
 		extract($vars);
