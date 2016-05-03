@@ -136,7 +136,7 @@ trait Cache
             throw new LengthException("el array pasado se necesita 2 o mas elementos");
         }
         
-        list($path, $filename) = $options;
+        list($path, $filename, $extendsFile) = $options;
         
         $this->fileCache = $save = $path . md5($filename) . '.php';
         
@@ -166,7 +166,8 @@ trait Cache
         foreach($this->timeFirstFile as $update => $file){
        		similar_text($origin, $file, $p);
        		
-    		if( (in_array($this->file, $this->timeFirstFile) && $file === $this->file) && $this->isUpdateFile($update) ){
+    		if( (in_array($this->file, $this->timeFirstFile) && $file === $this->file) && 
+       		    ($this->isUpdateFile($update) || filemtime($timeCache[$count]) < filemtime($extendsFile)) ){
     		    // actualiza el documento xml si se a modificado el archivo
     			$_f = $this->nodeTemplate->item($count);
     			$_ca = $this->nodeCache->item($count);

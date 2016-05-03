@@ -39,6 +39,12 @@ class Engine
 	 */
 	
 	protected $templateFile;
+	
+	/**
+	 * @var string|null nombre del arhivo extendido
+	 */
+	
+	protected $extendsFile;
 
 	/**
 	 * @var Compile
@@ -84,8 +90,7 @@ class Engine
 		    ));
 		    
 		    if($this->getOptions('cache')) {
-    			
-    			include $this->save([$this->getPathCompile(), $this->templateFile->getFileName()], $arr_t['filename'], $template);
+    			include $this->save([$this->getPathCompile(), $this->templateFile->getFileName(), $this->extendsFile], $arr_t['filename'], $template);
 		
 		    }else{
 		        
@@ -113,7 +118,7 @@ class Engine
 	{
 		$v_e = "";
 		if($extends->pregExtends()){
-			$file = $extends->contentHTML($extends->getExtendsFile());
+			$file = $extends->contentHTML($this->extendsFile = $extends->getExtendsFile());
 			$v_e .= $this->compiler($file);
 		}
 		
