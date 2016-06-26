@@ -28,17 +28,23 @@ class Block
 			
 			$arr = 'array(';
 			$keyArr = '__INICIALIZE_BLOCK__';
-			$endKeyArr = '__END_BLOCK__';
 			
 			$quitIdenteHtml = Quote::space($b_c);	
-			$convertArrBlock = str_replace('__QUOTE_OBJECT__', '->',$quitIdenteHtml);
+			$convertArrBlock = str_replace('__QUOTE_OBJECT__', "->",$quitIdenteHtml);
 			
 			foreach($func as $index => $func_b){
-				$startBlock = str_replace($func_b, '\'' . $keyArr . Quote::quotationMarks($nameBlock[$index]) . '\' => \'', $convertArrBlock);
+
+				$startBlock = str_replace(
+					$func_b,
+					'\'' . $keyArr . Quote::quotationMarks($nameBlock[$index]) . '\' => \'',
+					str_replace('\'', '"', $convertArrBlock)
+				);
+
 				$convertArrBlock = str_replace('%{endblock}', ' \',', $startBlock);
 			}
 
 			$conv_tag = preg_replace('/\%\{\s*(.*?)?\s*\}/', '<?php $1 ?>', substr($convertArrBlock, 0, -1));
+
 			$arr .= $conv_tag . ');';
 			
 			 unset($mBlock);

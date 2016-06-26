@@ -46,8 +46,8 @@ class Echos
     
     /**
      * @param string $content
-     * @throws RuntimeException
      * @return string
+     * @throws RuntimeException
      */
     
     public function withErrors($content)
@@ -90,12 +90,12 @@ class Echos
     
     public static function content($content, $data = array())
     {
-        if(preg_match_all('/\{\!\s(.*)?\!\}/', $content) !== 0){
-            
-            $dd = preg_replace_callback('/\{\!\s(.*)\s\!\}/', function($m) use($content, $data){
-    
+        if(preg_match_all('/\{\!\s(.*)\!\}/', $content) !== 0){
+
+            $dd = preg_replace_callback('/\{\!\s(.*)?\s\!\}/iU', function($m) use($content, $data){
+
                 $value = array_shift($m);
-                
+
                 if(!empty($data)){
                     
                     if(isset($data[0]) && $data[0] instanceof Data){
@@ -111,35 +111,60 @@ class Echos
                             
                             if(( $str !== false )){
 
-                                die($getNameVar);
                                 $multi = array_filter(explode('->', $getNameVar));
-                                
+
                                 $nameObject = array_shift($multi);
 
-                                foreach ($multi as $pObject) {
-                                    $cll = get_class($allData[$nameObject]);
-                                    if(strstr($pObject, '(') !== false){
-                                        $normalizeMethod = preg_replace('/(.*)?\((.*)?\)/', '$1', $pObject);
-                                        
-                                        if((!method_exists($allData[$nameObject], $normalizeMethod) && !is_object($allData[$nameObject]->$normalizeMethod))) {
-                                            throw new \BadMethodCallException("intentando llamar a un no objeto {$cll}::{$normalizeMethod}");
+                                if(strstr($nameObject, ',') === false) {
+                                    $referrerObject = array_shift($multi);
+
+                                    $class = $allData[$nameObject];
+
+                                    $cll = get_class($class); // class name
+
+                                    if(strstr($referrerObject, '(') !== false ) {
+                                        $normalizeMethod = preg_replace('/(.*)?\((.*)?\)/', '$1', $referrerObject);
+                                        static::isThrowMethod($class, $normalizeMethod, $cll);
+                                    }
+
+                                    if(strstr($referrerObject, '(') === false){
+                                        static::isThrowProperty($class, $referrerObject, $cll);
+                                    }
+
+                                    foreach ($multi as $pObject) {
+
+                                        if(strstr($pObject, '(') !== false && isset($class->$referrerObject)){
+                                            $normalizeMethod = preg_replace('/(.*)?\((.*)?\)/', '$1', $pObject);
+                                            $throwable = false;
+
+                                            if(property_exists($class->$referrerObject, $normalizeMethod)) {
+                                                if(!is_object($class->$referrerObject->$normalizeMethod) && !method_exists($class->$referrerObject, $normalizeMethod)){
+                                                    $throwable = true;
+                                                }
+                                            }elseif(!method_exists($class->$referrerObject, $normalizeMethod)) {
+                                                $throwable = true;
+                                            }
+
+                                            if($throwable == true) {
+                                                throw new BadMethodCallException("intentando llamar a un no objeto {$cll}::{$normalizeMethod}");
+                                            }
+
+                                        }
+
+                                        if(strstr($pObject, '(') === false && isset($class->$referrerObject)){
+                                            // $coincidencia = self::muchVariable($nameObject, $data, $allData);
+
+                                            static::isThrowProperty($class->$referrerObject, $pObject, $cll);
                                         }
                                     }
-                                    
-                                    if(strstr($pObject, '(') === false){
-                                        $coincidencia = self::muchVariable($nameObject, $data, $allData);
-                                        if(isset($allData[$coincidencia]) && !property_exists($allData[$coincidencia], $pObject)){
-                                            throw new \LogicException("propieda {$pObject} no definida en {$cll}");
-                                        }
-                                    }
-                                    
                                 }
-                                
-                                
+
                             }else if($str === false && (!isset($data[$getNameVar]) && !isset($allData[$getNameVar]))){
                                 if(!self::checkVarStructureControl($content, $getNameVar)){
                                     if($coincidencia = self::muchVariable($getNameVar, $data, $allData)) {
-                                        throw new OutOfBoundsException("la variable o clave [{$coincidencia}] no existe!");
+                                        if(strpos($coincidencia, '[') === false) {
+                                            throw new OutOfBoundsException("la variable o clave [{$coincidencia}] no existe!");
+                                        }
                                     }
                                 }
                                 
@@ -148,7 +173,8 @@ class Echos
                         
                     }
                 }
-                return str_replace('.', '.', $value);
+
+                return self::replace('/\{\!\s(.*)?\s\!\}/', '<?php echo $1; ?>', $value);
     
             }, $content);
             
@@ -156,6 +182,34 @@ class Echos
         }
     
         return $content;
+    }
+
+    /**
+     * @param $o
+     * @param $p
+     * @param $class
+     * @throws LogicException
+     */
+
+    protected function isThrowProperty($o, $p, $class)
+    {
+        if(!property_exists($o, $p)) {
+            throw new LogicException("propieda {$p} no definida en {$class}");
+        }
+    }
+
+    /**
+     * @param $c
+     * @param $m
+     * @param $cll
+     * @throws BadMethodCallException
+     */
+
+    protected function isThrowMethod($c, $m, $cll)
+    {
+        if((!method_exists($c, $m) && !is_object($c->$m))) {
+            throw new BadMethodCallException("intentando llamar a un no objeto {$cll}::{$m}");
+        }
     }
     
     /**
